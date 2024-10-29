@@ -2,7 +2,8 @@
 
 ## Defining Collection
 
-```html
+```astro
+---
 import { z, defineCollection } from 'astro:content';
 
 const postCollect = defineCollection({
@@ -17,17 +18,20 @@ const postCollect = defineCollection({
 export const collections = {
     posts : postCollect,
 }
+---
 ```
 
 ## Query Collection
 
 ```astro
+---
 import {getCollection} from 'astro:content';
 import Base from "../layouts/Base.astro"
 
 // const postAll = await Astro.glob('./posts/*.md');
 
 const postAll = await getCollection('posts');
+---
 ```
 
 ## Generating Routes from Content
