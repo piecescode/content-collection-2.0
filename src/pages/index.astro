@@ -1,16 +1,81 @@
 ---
+import {getCollection} from 'astro:content';
+import Base from "../layouts/Base.astro"
 
+// const postAll = await Astro.glob('./posts/*.md');
+
+const postAll = await getCollection('posts');
+export const prerender = true;
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Base pageTitle = 'Double C'>
+	<div class="ctn">
+		<section class="hero">
+			<h1>Content Collection</h1>
+		</section>
+		<section class="post">
+			<h2>Post</h2>
+			<div class="ctn-Post">
+				{
+					postAll.map((post) => 
+						<div class="card">
+							<a href={`/posts/${post.slug}`}><h3>{post.data.title}</h3></a>
+						</div>
+					)
+				}
+			</div>
+		</section>
+	</div>
+</Base>
+
+<style>
+	.hero {
+		width: 100%;
+		min-height: 30vh;
+		display: grid;
+		place-content: center;
+		align-items: center;
+		box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+	}
+
+	.post {
+		padding-top: 30px;
+
+		& h2 {
+			line-height: 2;
+			font-size: 28px;
+			text-transform: uppercase;
+			border-bottom: 1px dashed #e9ecef;
+			font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+		}
+	}
+
+	.ctn-Post {
+		display: grid;
+		place-content: center;
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: 25px;
+		margin-top: 20px;
+	}
+
+	.card {
+		width: 250px;
+		height: 80px;
+		border: 1px solid #e9ecef;
+		box-shadow: #fff 3px 3px;
+		padding: 10px;
+
+		& a {
+			text-decoration: none;
+			color: #e9ecef;
+
+			& h3 {
+				text-align: center;
+				line-height: 2;
+				font-size: 24px;
+			}
+		}
+
+
+	}
+</style>

@@ -1,15 +1,58 @@
-# Astro Starter Kit: Minimal
+# Content Collection 2.0 ~ 4.0
 
-```sh
-npm create astro@latest -- --template minimal
+## Defining Collection
+
+```html
+import { z, defineCollection } from 'astro:content';
+
+const postCollect = defineCollection({
+    type : 'content', // v2.5.0 and later
+    schema : z.object({
+        title : z.string(),
+        pubDate: z.string(),
+        info : z.string(),
+    })
+ });
+
+export const collections = {
+    posts : postCollect,
+}
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
+## Query Collection
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+```astro
+import {getCollection} from 'astro:content';
+import Base from "../layouts/Base.astro"
 
+// const postAll = await Astro.glob('./posts/*.md');
+
+const postAll = await getCollection('posts');
+```
+
+## Generating Routes from Content
+
+```astro
+---
+import Base from '../../layouts/Base.astro';
+import { type CollectionEntry , getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+    const postEntries = await getCollection('posts');
+    return postEntries.map(key => ({
+        params: {slug: key.slug },
+        props: key
+    }))
+}
+
+type Props = CollectionEntry<'posts'>;
+
+const key = Astro.props;
+const { Content } = await key.render();
+---
+
+<Content />
+```
 ## 🚀 Project Structure
 
 Inside of your Astro project, you'll see the following folders and files:
